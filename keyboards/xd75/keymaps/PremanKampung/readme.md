@@ -1,7 +1,7 @@
 XD75 Alpha on most left with numpad on the right side.
 For picture go to  https://imgur.com/xTyx51E
 
-Autoshift turnoff using default setting.
+Autoshift turnon using default setting.
 Oneshot key on Left Shift.
 Dynamic macro enabled.
 Has a default RGB mode when Capslock on and own RGB mode when switching layer.

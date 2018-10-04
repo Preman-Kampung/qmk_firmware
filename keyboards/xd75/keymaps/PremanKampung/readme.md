@@ -8,6 +8,7 @@ Has a default RGB mode when Capslock on and own RGB mode when switching layer.
 
 FYI: This is my first custom keyboard, my first time using Github and my first time doing things using dos like interface. I don't know sh!t about coding and English is not my native language.
 
+The RGB switching code from drashna and sekrit_ from Reddit
 
 
 

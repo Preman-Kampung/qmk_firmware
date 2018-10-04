@@ -42,15 +42,8 @@ enum keycodes {
 
 #include "dynamic_macro.h"
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if ( !process_record_dynamic_macro( keycode, record ) ) {
-    return false;
-  }
-
-  return true;
-};
-
 #define RGBLIGHT_LIGHT_VAL 255
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* LAYOUT WIP
@@ -148,12 +141,98 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
     return MACRO_NONE;
 };
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if ( !process_record_dynamic_macro( keycode, record ) ) {
+    return false;
+  }
 
+  return true;
+};
 
-void led_set_user(uint8_t usb_led) {
+//CAPSLOCK stuff
+/* void led_set_user(uint8_t usb_led) {
     if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
         rgblight_mode_noeeprom(18);
     } else {
         rgblight_mode_noeeprom(14);
     }
+} */
+
+void led_set_user(uint8_t usb_led) {
+  if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
+        rgblight_mode_noeeprom(18);
+  } else { 
+    if (biton32(layer_state) == _QW) {
+        rgblight_mode_noeeprom(13);
+    }
+  }
+}
+
+// RGB switch mode when changing layer
+// RGB Modes
+// 1 = Static
+// 2-5 = Breathing
+// 6-8 = Rainbow
+// 9-14 = Swirl
+// 15-20 = Snake
+// 21-24 = Nightrider
+// 25 = Christmas
+// 26-30 = Static Gradient
+const uint8_t RGBLED_RAINBOW_SWIRL_INTERVALS[] PROGMEM = {100, 50, 10}; // Set the last one to 10ms for some speedy swirls
+
+uint8_t prev = _QW;
+uint32_t check;
+uint32_t desired = 13;
+
+void matrix_init_user() {
+	rgblight_mode(desired);
+}
+
+uint32_t layer_state_set_user(uint32_t state) {
+  uint8_t layer = biton32(state);
+  if (prev!=_L3) {
+	  switch (layer) {
+		case _QW:
+		rgblight_mode(desired);
+		if (host_keyboard_leds()  & (1<<USB_LED_CAPS_LOCK) ) {
+        rgblight_mode_noeeprom(18);
+		}
+		  break;
+		
+		case _L1: // If we're in swirl mode, then speed up the swirls, otherwise breathe
+		  check = rgblight_get_mode();
+		  if (check > 8 && check < 15) {
+			rgblight_mode(30);
+		  } else {
+			rgblight_mode(30);
+		  }
+		  break;
+		
+		case _L2: // Same as above but reverse direction, otherwise nightrider
+		  check = rgblight_get_mode();
+		  if (check > 8 && check < 15) {
+			rgblight_mode(21);
+		  } else {
+			rgblight_mode(21);
+		  }
+		  break;
+		
+		case _L4: // Same as above but reverse direction, otherwise nightrider
+		  check = rgblight_get_mode();
+		  if (check > 8 && check < 15) {
+			rgblight_mode(21);
+		  } else {
+			rgblight_mode(21);
+		  }
+		  break;
+		  
+		case _L3:
+			rgblight_mode(18);
+			break;
+	  }
+  } else {
+	  desired = rgblight_get_mode();
+  }
+  prev = layer;
+  return state;
 }

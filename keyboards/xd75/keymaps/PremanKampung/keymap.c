@@ -150,23 +150,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 };
 
 //CAPSLOCK stuff
-/* void led_set_user(uint8_t usb_led) {
-    if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
-        rgblight_mode_noeeprom(18);
-    } else {
-        rgblight_mode_noeeprom(14);
-    }
-} */
-
-void led_set_user(uint8_t usb_led) {
-  if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
-        rgblight_mode_noeeprom(18);
-  } else { 
-    if (biton32(layer_state) == _QW) {
-        rgblight_mode_noeeprom(13);
-    }
-  }
-}
 
 // RGB switch mode when changing layer
 // RGB Modes
@@ -178,60 +161,82 @@ void led_set_user(uint8_t usb_led) {
 // 21-24 = Nightrider
 // 25 = Christmas
 // 26-30 = Static Gradient
+
+
+void led_set_user(uint8_t usb_led) {
+  if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
+        rgblight_mode(18);
+		rgblight_sethsv(355, 255, 255);
+  } else { 
+    if (biton32(layer_state) == _QW) {
+        rgblight_mode(13);
+		rgblight_sethsv(255, 50, 255);
+    }
+  }
+}
+
 const uint8_t RGBLED_RAINBOW_SWIRL_INTERVALS[] PROGMEM = {100, 50, 10}; // Set the last one to 10ms for some speedy swirls
 
 uint8_t prev = _QW;
-uint32_t check;
-uint32_t desired = 13;
+uint32_t desired = 18;
+uint16_t hue = 355;
+uint16_t sat = 255;
+uint16_t val = 255;
+
+void get_hsv(void) {
+    hue = rgblight_get_hue();
+    sat = rgblight_get_sat();
+    val = rgblight_get_val();
+}
+
+void reset_hsv(void) {
+    rgblight_sethsv(hue, sat, val);
+}
 
 void matrix_init_user() {
-	rgblight_mode(desired);
+    rgblight_mode(desired);
+    rgblight_enable();
+    reset_hsv();
 }
+
 
 uint32_t layer_state_set_user(uint32_t state) {
   uint8_t layer = biton32(state);
-  if (prev!=_L3) {
-	  switch (layer) {
-		case _QW:
-		rgblight_mode(desired);
-		if (host_keyboard_leds()  & (1<<USB_LED_CAPS_LOCK) ) {
-        rgblight_mode_noeeprom(18);
-		}
-		  break;
-		
-		case _L1: // If we're in swirl mode, then speed up the swirls, otherwise breathe
-		  check = rgblight_get_mode();
-		  if (check > 8 && check < 15) {
-			rgblight_mode(30);
-		  } else {
-			rgblight_mode(30);
-		  }
-		  break;
-		
-		case _L2: // Same as above but reverse direction, otherwise nightrider
-		  check = rgblight_get_mode();
-		  if (check > 8 && check < 15) {
-			rgblight_mode(21);
-		  } else {
-			rgblight_mode(21);
-		  }
-		  break;
-		
-		case _L4: // Same as above but reverse direction, otherwise nightrider
-		  check = rgblight_get_mode();
-		  if (check > 8 && check < 15) {
-			rgblight_mode(21);
-		  } else {
-			rgblight_mode(21);
-		  }
-		  break;
-		  
-		case _L3:
+  if (prev!=_L4) {
+      switch (layer) {
+        case _QW:
 			rgblight_mode(18);
-			break;
-	  }
+			rgblight_sethsv(355, 255, 255);
+          if (host_keyboard_leds()  & (1<<USB_LED_CAPS_LOCK) ) {
+			rgblight_mode(13);
+			rgblight_sethsv(255, 50, 255);
+          }
+          break;
+
+        case _L1:
+          rgblight_mode(21);
+          rgblight_sethsv(150, 255, 255);
+          break;
+
+        case _L2:
+          rgblight_mode(21); 
+          rgblight_sethsv( 280, 255, 255);
+          break;
+
+        case _L3:
+          rgblight_mode(5);     
+          rgblight_sethsv( 16, 255, 255);
+          break;
+ 
+		case _L4:
+          rgblight_mode(21);     
+          rgblight_sethsv( 200, 255, 255);
+          break;
+
+      }
   } else {
-	  desired = rgblight_get_mode();
+      desired = rgblight_get_mode();
+      get_hsv();
   }
   prev = layer;
   return state;

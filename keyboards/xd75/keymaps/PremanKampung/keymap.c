@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	{ DYN_REC_STOP	, KC_F1		, KC_F2		, KC_F3		, KC_F4		, KC_F5	 , KC_F6	, KC_F7		, KC_F8		, KC_F9		, KC_F10	, KC_F11	, KC_F12	, RC_0		, RC_1		}, 
 	{ KC_TAB		, KC_MPRV	, KC_MPLY	, KC_MNXT	, _______	, _______, _______	, _______	, _______	, _______	, _______	, RGB_SAI	, RGB_SAD	, RGB_M_SN	, _______	}, 
 	{ KC_ASTG		, KC_VOLD	, KC_MSTP	, KC_VOLU	, KC_MUTE	, _______, _______	, _______	, _______	, _______	, _______	, RGB_M_B	, RGB_M_R	, RGB_M_SW	, _______	}, 
-	{ KC_RSFT		, _______	, _______	, KC_CALC	, _______	, _______, _______	, _______	, RGB_RMOD	, RGB_TOG	, RGB_MOD	, _______	, MM_0		, MM_1		, _______	}, 
+	{ KC_RSFT		, _______	, _______	, KC_CALC	, _______	, _______, _______	, _______	, RGB_RMOD	, RGB_TOG	, RGB_MOD	, MM_0		, MM_1		, _______	, _______	}, 
 	{ KC_RCTL		, _______	, KC_RALT	, KC_TRNS	, _______	, _______, _______	, MO(_L3)	, RGB_VAD	, RGB_HUI	, RGB_VAI	, _______	, _______	, _______	, _______	}, 
 },
 
@@ -108,9 +108,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  [_L3] = { /* FUNCTION */
 	{ XXXXXXX, XXXXXXX, XXXXXXX	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
-	{ XXXXXXX, XXXXXXX, XXXXXXX	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PWR	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
+	{ XXXXXXX, XXXXXXX, XXXXXXX	, XXXXXXX,	RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PWR	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
 	{ XXXXXXX, XXXXXXX, KC_SLEP	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
-	{ XXXXXXX, XXXXXXX, RESET	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
+	{ XXXXXXX, XXXXXXX, XXXXXXX	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
 	{ XXXXXXX, XXXXXXX, XXXXXXX	, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TRNS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX }, 
 }, 
 
@@ -171,7 +171,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void led_set_user(uint8_t usb_led) {
   if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
         rgblight_mode(18);
-		rgblight_sethsv(355, 255, 255);
+		rgblight_sethsv(0, 50, 255);
   } else { 
     if (biton32(layer_state) == _QW) {
         rgblight_mode(13);
@@ -211,7 +211,7 @@ uint32_t layer_state_set_user(uint32_t state) {
       switch (layer) {
         case _QW:
 			rgblight_mode(18);
-			rgblight_sethsv(355, 255, 255);
+			rgblight_sethsv(0, 50, 255);
           if (host_keyboard_leds()  & (1<<USB_LED_CAPS_LOCK) ) {
 			rgblight_mode(13);
 			rgblight_sethsv(255, 50, 255);
@@ -219,22 +219,22 @@ uint32_t layer_state_set_user(uint32_t state) {
           break;
 
         case _L1:
-          rgblight_mode(21);
+          rgblight_mode(23);
           rgblight_sethsv(150, 255, 255);
           break;
 
         case _L2:
-          rgblight_mode(21); 
+          rgblight_mode(23); 
           rgblight_sethsv( 280, 255, 255);
           break;
 
         case _L3:
           rgblight_mode(5);     
-          rgblight_sethsv( 16, 255, 255);
+          rgblight_sethsv( 16, 100, 255);
           break;
  
 		case _L4:
-          rgblight_mode(21);     
+          rgblight_mode(23);     
           rgblight_sethsv( 200, 255, 255);
           break;
 

@@ -98,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
   [_L2] = { /* FUNCTION */
-	{ KC_ESC	,	KC_1 ,	KC_2	,	KC_3	,	KC_4	,	KC_5	,	KC_6	,	KC_7	,	KC_8	, KC_LBRC	, KC_RBRC, _______	,	KC_PSCR	, KC_SLCK, KC_DEL	}, 
+	{ KC_ESC	,	KC_1 ,	KC_2	,	KC_3	,	KC_4	,	KC_5	,	KC_6	,	KC_7	,	KC_8	, KC_LBRC	, KC_RBRC, KC_MINS	,	KC_PSCR	, KC_SLCK, KC_DEL	}, 
 	{ KC_TAB	, _______, _______	, _______	, _______	, _______	, _______	, _______	, _______	, _______	, _______, KC_HOME	,	KC_UP	, KC_PGUP, _______	}, 
 	{ KC_NLCK	, _______, _______	, _______	, _______	, _______	, KC_HOME	, _______	, _______	, _______	, KC_SCLN, KC_LEFT	,	_______	, KC_RGHT, KC_ENT	}, 
 	{ KC_RSFT	, _______, _______	, _______	, _______	, _______	, KC_END	, _______	, KC_DOT	, KC_HOME	, KC_BSLS, KC_END	,	KC_DOWN	, KC_PGDN, KC_PENT	}, 
